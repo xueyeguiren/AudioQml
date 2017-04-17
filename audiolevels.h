@@ -31,6 +31,7 @@
 #define AUDIOLEVELS_H
 
 #include "qaudio.h"
+#include<QAudioOutput>
 #include <QObject>
 #include <QImage>
 #include <QDebug>
@@ -41,6 +42,7 @@
 #include <global.h>
 #include <speechrecognizer.h>
 #include <structstore.h>
+#include <speechsynthesis.h>
 class AudioLevelsIODevice;
 QT_BEGIN_NAMESPACE
 class QAudioInput;
@@ -74,11 +76,19 @@ public:
     static struct Global::speech_rec rec;
     //静态session_id
 //    static char* session_id;
+    QFile* inputFile;//播放文件
+    QAudioOutput *audio;//output
 public slots:
     //打开声卡capture
     void startRecord();
     //关闭声卡capture
     void stopRecord();
+    //测试语音合成
+    void testTTS();
+    //语音播放
+    int startPlayer(QString fileName);
+    //结束播放
+    void finishedPlaying(QAudio::State state);
 private:
     //! [0]
    AudioLevelsIODevice *m_device;

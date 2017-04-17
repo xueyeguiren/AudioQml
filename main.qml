@@ -27,6 +27,7 @@ ApplicationWindow {
             height: parent.height;
         }
     }
+    //开始进行图形生成及录音
     Rectangle{
         id:btn_showPic;
         anchors.top: rectangle_main.bottom;
@@ -57,7 +58,7 @@ ApplicationWindow {
             font.pixelSize: 24;
         }
     }
-
+    //结束录音及图形
     Rectangle{
         id:btn_stopic;
         anchors.top: rectangle_main.bottom;
@@ -88,6 +89,33 @@ ApplicationWindow {
             font.pixelSize: 24;
         }
     }
+    //测试语音合成
+    Rectangle{
+        id:btn_testTTS;
+        anchors.top: rectangle_main.bottom;
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.horizontalCenterOffset: 200;
+        width: 100;
+        height: 50;
+        border.color: "black"
+        objectName: "testTTS"
+        MouseArea{
+            width: parent.width;
+            height: parent.height;
+            onClicked: {
+//                al.testTTS();
+                al.startPlayer("/home/mjl/general.wav");
+            }
+        }
+        Text {
+            id: name3
+            text: qsTr("结束");
+            anchors.verticalCenter: parent.verticalCenter;
+            anchors.horizontalCenter: parent.horizontalCenter;
+            font.pixelSize: 24;
+        }
+    }
+
     AudioLevels{
         id:al;
     }

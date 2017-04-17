@@ -15,7 +15,7 @@ const char* SpeechRecognizer::startSession()
     if (MSP_SUCCESS != ret)	{
            qDebug()<<"MSPLogin failed , Error code"<<ret;
         }
-    session_id = QISRSessionBegin(NULL, session_begin_params, &errcode);
+    session_id = QISRSessionBegin(NULL, stt_session_begin_params, &errcode);
     if (MSP_SUCCESS != errcode)
     {
         qDebug()<<"\nQISRSessionBegin failed! error code"<<errcode;
@@ -56,20 +56,6 @@ int SpeechRecognizer::stopSession(const char* session_id)
 //    setStop();
 }
 
-//void SpeechRecognizer:: end_sr_on_error(struct speech_rec *sr, int errcode)
-//{
-//    if(sr->aud_src == SR_MIC)
-//        LinuxRecord::stop_record(sr->recorder);
-
-//    if (sr->session_id) {
-//        if (sr->notif.on_speech_end)
-//            sr->notif.on_speech_end(errcode);
-
-//        QISRSessionEnd(sr->session_id, "err");
-//        sr->session_id = NULL;
-//    }
-//    sr->state = SR_STATE_INIT;
-//}
 void SpeechRecognizer:: createThreadStop()
 {
     pthread_attr_t attr;
