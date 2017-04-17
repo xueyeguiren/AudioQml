@@ -46,6 +46,23 @@ public:
         int		data_size;              // = 纯数据长度 : FileSize - 44
     } wave_pcm_hdr;
 
+    struct QueryResult
+    {
+        /**
+         * 0--表示语音是未识别               届时语音提示，“请说普通话”
+         * 1--表示识别语音为商品类型          届时调转至二维码支付界面并带有数量
+         * 2--表示识别的语音为对话类型        届时在广告位置显示服务器返回结果并语音播报
+         * 3--表示识别的语音服务器也无法处理　　届时语音播报“我不太明白”
+        */
+        int mode;
+        QString returnChar;//返回的字符串
+        int goodsNum;//商品数量（如果识别为商品类型的话）
+        int googsId;//商品id
+        int store;//商品库存
+
+    };
+
 };
+
 
 #endif // GLOBAL_H

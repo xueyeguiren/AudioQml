@@ -105,8 +105,17 @@ struct Global:: speech_rec* AudioLevelsIODevice:: getAudioData()
     return rec;
 
 }
-void AudioLevelsIODevice::startSpeech(char*data,qint64 maxSize)
-{
+int AudioLevelsIODevice::startSpeech(char*data,qint64 maxSize)
+{  SpeechRecognizer sr;
+    const char* result=sr.result;
+    if(!result==NULL)
+    {
+        AudioLevels as;
+        as.stopRecord();
+        qDebug()<<"tt000000000000";
+        return NULL;
+    }
+
 //    qDebug()<<"startSpeech";
     struct Global::speech_rec* rec=&audioLevels.rec;
     rec->data=data;

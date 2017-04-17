@@ -1,4 +1,4 @@
-QT += qml quick multimedia
+QT += qml quick multimedia sql
 
 CONFIG += c++11
 
@@ -8,7 +8,10 @@ SOURCES += main.cpp \
     wavepaint.cpp \
     global.cpp \
     speechrecognizer.cpp \
-    speechsynthesis.cpp
+    speechsynthesis.cpp \
+    srinterface.cpp \
+    processmysql.cpp \
+    audioplayer.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,4 +48,8 @@ HEADERS += \
     global.h \
     speechrecognizer.h \
     structstore.h \
-    speechsynthesis.h
+    speechsynthesis.h \
+    srinterface.h \
+    processmysql.h \
+    javabeen.h \
+    audioplayer.h

@@ -104,7 +104,7 @@ ApplicationWindow {
             height: parent.height;
             onClicked: {
 //                al.testTTS();
-                al.startPlayer("/home/mjl/general.wav");
+//                al.startPlayer("/home/pi/wav/server.wav");
             }
         }
         Text {

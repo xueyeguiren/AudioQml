@@ -6,14 +6,13 @@
 #include <qtts.h>
 #include <unistd.h>
 #include <QDebug>
-
 class SpeechSynthesis
 {
 public:
     SpeechSynthesis();
     int StartCompose(char *content);
     int text_to_speech(const char* src_text, const char* des_path);
-    char* fileName="/home/mjl/general.wav";//用于语音合成对讲的通用与原因会被覆盖
+    char* fileName="/home/pi/wav/server.wav";//用于语音合成对讲的通用与原因会被覆盖
 
     /* 默认wav音频头部数据 */
     Global::wave_pcm_hdr default_wav_hdr =

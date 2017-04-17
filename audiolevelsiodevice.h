@@ -53,7 +53,7 @@ public:
     QTime qt;
     struct  Global:: speech_rec* getAudioData();
     static struct Global:: speech_rec* rec;
-    void startSpeech(char*data,qint64 maxSize);
+    int startSpeech(char*data,qint64 maxSize);
 protected:
     qint64 readData(char *data, qint64 maxSize);
     qint64 writeData(const char *data, qint64 maxSize);

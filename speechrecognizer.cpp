@@ -1,10 +1,12 @@
 #include "speechrecognizer.h"
 #include <audiolevels.h>
+#include <srinterface.h>
 SpeechRecognizer::SpeechRecognizer()
 {
 
 }
 bool SpeechRecognizer::isFirstStop=true;
+char* SpeechRecognizer::result=NULL;
 //进行登陆及开始新会话
 const char* SpeechRecognizer::startSession()
 {
@@ -28,7 +30,6 @@ const char* SpeechRecognizer::startSession()
 int SpeechRecognizer::startSpeechRecognizer(struct Global::speech_rec* rec)
 {
     int ret;
-    const char* result;
     if(isFirstStop)
     {
     ret= QISRAudioWrite(rec->session_id,rec->data,rec->length,rec->audio_status,&rec->ep_stat,&rec->rec_stat);
@@ -39,11 +40,13 @@ int SpeechRecognizer::startSpeechRecognizer(struct Global::speech_rec* rec)
 
     if((rec->rec_stat==MSP_REC_STATUS_SUCCESS||rec->ep_stat==MSP_EP_AFTER_SPEECH)&&isFirstStop)
     {
-    result=QISRGetResult(rec->session_id,&rec->rec_stat,0,&ret);
+    result=(char*)QISRGetResult(rec->session_id,&rec->rec_stat,0,&ret);
     qDebug()<<"result--------------------"<<result;
+    isFirstStop=false;
+    SRInterface si;
+    si.SpeechStart(result);
 //    stopSession(rec->session_id);
-    createThreadStop();
-
+//    createThreadStop(result);
     }
     }
 }
@@ -51,6 +54,7 @@ int SpeechRecognizer::startSpeechRecognizer(struct Global::speech_rec* rec)
 //退出登陆及结束会话
 int SpeechRecognizer::stopSession(const char* session_id)
 {
+    this->result=NULL;
     QISRSessionEnd(session_id,"normal");
     MSPLogout();
 //    setStop();

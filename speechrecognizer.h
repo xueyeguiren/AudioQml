@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include <structstore.h>
 
+class SRInterface;
 class AudioLevels;
 class SpeechRecognizer
 {
@@ -29,6 +30,8 @@ public:
     void createThreadStop();
     static void* threadStop(void* arg);
     static bool isFirstStop;
+
+    static char* result;
     //struct speechrecognizer
 };
 

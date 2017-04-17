@@ -171,9 +171,16 @@ void* AudioLevels::gatherDataFun(void* arg)
   memset(lineStr,0.0,216);//重新分配linestr
   int count=0;//统计延时的次数
   int silentTimes=0;//方差小于某个值的次数，即换算成不说话的时间，当达到一定事件后就判断说话结束
-
-  while(!isStopThread){
+  SpeechRecognizer sr;
+  char* result;
+  while(1){
      usleep(60000);
+     result=sr.result;
+     if(!result==NULL)
+     {
+         usleep(90000);
+         break;
+     }
      count+=1;
      rec_record=m_device->getAudioData();
      if(!rec_record->start)
@@ -200,8 +207,9 @@ void* AudioLevels::gatherDataFun(void* arg)
 //         break;
      }
   }
-//  free(lineStr);
   qDebug()<<"while循环";
+//  free(lineStr);
+
   return NULL;
 }
 
@@ -211,15 +219,14 @@ void AudioLevels::stopRecord()
     SpeechRecognizer sr;
     sr.stopSession(rec.session_id);
     QAudio::State st;
-
-    if (as.m_audioInput)
-    {
-        as.m_audioInput->stop();
-        st=as.m_audioInput->state();
-    }
     if (as.m_device)
         as.m_device->close();
-    isStopThread=true;
+    if (as.m_audioInput)
+    {
+        as.m_audioInput->suspend();
+        st=as.m_audioInput->state();
+    }
+
     qDebug()<<"stop-state"<<st;
     delete m_device;
     m_device=NULL;
@@ -247,44 +254,4 @@ void AudioLevels:: testTTS()
     ss.StartCompose("君不见黄河之水天上来");
 }
 
-int AudioLevels::startPlayer(QString fileName)
-{
-    //读取文件各有用信息
-    qDebug()<<"startPlayer"<<fileName;
-    inputFile=new QFile;
-    inputFile->setFileName(fileName);
-    bool ret=inputFile->open(QIODevice::ReadOnly);
-    qDebug()<<(inputFile);
-    if(!ret)
-    {
-        return -1;
-    }
-    QAudioFormat format;
-    format.setSampleRate(16000);
-    format.setChannelCount(1);
-    format.setSampleSize(16);
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
-    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
-    if (!info.isFormatSupported(format)) {
 
-      qDebug()<<"raw audio format not supported by backend, cannot play audio.";
-      return -2;
-     }
-    audio = new QAudioOutput(format, this);
-    audio->start(inputFile);
-    connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(finishedPlaying(QAudio::State)));
-    return 0;
-}
-void AudioLevels::finishedPlaying(QAudio::State state)
- {
-   if(state == QAudio::IdleState) {
-     audio->stop();
-     inputFile->close();
-     delete audio;
-     delete inputFile;
-     qDebug() << "play end!";
-   }
-
- }
